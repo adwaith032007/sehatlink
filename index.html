@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEHATLINK — Connected Rural Care</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f7fb;color:#14213d}
+button{font:inherit;cursor:pointer}.app{display:flex;min-height:100vh}
+.sidebar{width:270px;background:#101a2d;color:#fff;padding:28px 18px;flex-shrink:0}
+.brand{font-size:27px;font-weight:900;letter-spacing:.5px;padding:0 10px}.tag{font-size:11px;letter-spacing:2px;color:#9fb4d5;font-weight:700;margin:8px 10px 38px}
+.side-title{font-size:11px;letter-spacing:1.7px;color:#7185a8;font-weight:800;margin:20px 0 12px}
+.role-btn,.nav-btn{width:100%;border:0;background:transparent;color:#dce6f7;text-align:left;padding:12px 13px;border-radius:8px;margin:3px 0}
+.role-btn:hover,.nav-btn:hover,.nav-btn.active{background:#1c2a45}.role-btn.active{background:#243756;color:#fff}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#cbd8ea;margin-right:7px}
+.nav{margin-top:25px;border-top:1px solid #26334a;padding-top:18px}
+.nav-btn{font-size:14px}.nav-btn span{margin-right:9px}
+.main{flex:1;min-width:0}.topbar{height:86px;background:#fff;border-bottom:1px solid #dce2eb;display:flex;align-items:center;justify-content:space-between;padding:0 34px}
+.top-title{font-size:17px;font-weight:800}.top-sub{font-size:13px;color:#718096;margin-top:3px}.user{color:#52657f;font-size:14px}
+.content{padding:30px 34px;max-width:1400px}.page-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:22px}
+h1{margin:0;font-size:28px}.muted{color:#6b7890}.eyebrow{font-size:12px;color:#58709a;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;margin-bottom:7px}
+.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:20px}.cards{grid-template-columns:1.4fr 1fr}
+.card{background:#fff;border:1px solid #e0e6ee;border-radius:12px;padding:20px;box-shadow:0 3px 12px rgba(16,26,45,.04)}
+.stat-num{font-size:30px;font-weight:850;margin-top:8px}.stat-label{font-size:13px;color:#6d7890}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#edf3fb;color:#355a89;font-size:11px;font-weight:800}
+.green{background:#eaf7ef;color:#227044}.amber{background:#fff5df;color:#93620a}.red{background:#fdecec;color:#a33a3a}
+.row{display:flex;justify-content:space-between;gap:15px;align-items:center}.patient{font-weight:800}.small{font-size:12px}.journey{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:22px 0 8px}
+.step{padding:9px 11px;border:1px solid #dce3ed;border-radius:8px;font-size:12px;background:#fafbfd}.arrow{color:#9aa7bb}
+.btn{border:0;border-radius:8px;padding:10px 14px;font-weight:750}.primary{background:#1f5fae;color:white}.secondary{background:#eef2f7;color:#33445f}.danger{background:#f8e8e8;color:#9d3434}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:13px 9px;border-bottom:1px solid #edf0f5;font-size:13px}.table th{color:#718096;font-size:11px;text-transform:uppercase;letter-spacing:.7px}
+.notice{padding:14px;border-radius:9px;background:#f0f6ff;border:1px solid #d7e6fa;margin:14px 0;font-size:13px}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field label{display:block;font-size:12px;font-weight:750;margin-bottom:6px;color:#53627a}.field input,.field select,.field textarea{width:100%;padding:11px;border:1px solid #d7dee9;border-radius:8px;background:#fff}.field textarea{min-height:90px}
+.hidden{display:none}.actionbar{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.modal{position:fixed;inset:0;background:rgba(8,15,28,.45);display:flex;align-items:center;justify-content:center;padding:20px}.modal-box{background:#fff;width:min(520px,100%);border-radius:14px;padding:24px}
+.bar{height:10px;background:#edf1f6;border-radius:8px;overflow:hidden}.bar i{display:block;height:100%;background:#4d77ac}.funnel{display:grid;gap:12px}.funnel-row{display:grid;grid-template-columns:90px 1fr 45px;gap:10px;align-items:center;font-size:13px}
+@media(max-width:850px){.sidebar{width:220px}.stats,.cards{grid-template-columns:1fr 1fr}.content{padding:22px}.topbar{padding:0 22px}}
+@media(max-width:620px){.sidebar{display:none}.stats,.cards,.form-grid{grid-template-columns:1fr}.topbar{height:72px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">SEHATLINK</div><div class="tag">CONNECTED RURAL CARE</div>
+  <div class="side-title">SWITCH ROLE</div>
+  <button class="role-btn active" data-role="worker"><span class="dot"></span>Frontline Worker</button>
+  <button class="role-btn" data-role="doctor"><span class="dot"></span>Doctor</button>
+  <button class="role-btn" data-role="admin"><span class="dot"></span>Administrator</button>
+  <div class="nav" id="nav"></div>
+</aside>
+<main class="main">
+<header class="topbar"><div><div class="top-title" id="roleTitle">Frontline Worker</div><div class="top-sub" id="roleSub">Care coordination workspace</div></div><div class="user">● Arjun • PHC Staff</div></header>
+<section class="content" id="content"></section>
+</main>
+</div>
+<div id="modalRoot"></div>
+<script>
+(function(){
+"use strict";
+var state={role:"worker",page:"dashboard",triaged:false,queued:false,referral:"Created",followupAssigned:false};
+
+var menus={
+ worker:[
+  ["dashboard","⌂","Dashboard"],["patients","●","Patients"],["triage","✚","Triage"],["referrals","↗","Referrals"],["followup","◷","Follow-up"]
+ ],
+ doctor:[
+  ["dashboard","⌂","Doctor Queue"],["patient","●","Meena Devi"],["referrals","↗","Referrals"],["followup","◷","Follow-up"]
+ ],
+ admin:[
+  ["dashboard","⌂","System Overview"],["facilities","▣","Facilities"],["analytics","▥","Quality Analytics"]
+ ]};
+
+function el(id){return document.getElementById(id)}
+function btn(text,cls,onclick){return '<button class="btn '+(cls||"secondary")+'" onclick="'+onclick+'">'+text+'</button>'}
+function shell(title,sub,body,actions){
+ return '<div class="page-head"><div><div class="eyebrow">'+sub+'</div><h1>'+title+'</h1></div>'+(actions||'')+'</div>'+body;
+}
+function setPage(p){state.page=p;render()}
+function roleName(){return state.role==="worker"?"Frontline Worker":state.role==="doctor"?"Doctor":"Administrator"}
+function renderNav(){
+ var html='<div class="side-title">WORKSPACE</div>';
+ menus[state.role].forEach(function(m){html+='<button class="nav-btn '+(state.page===m[0]?'active':'')+'" onclick="setPage(\''+m[0]+'\')"><span>'+m[1]+'</span>'+m[2]+'</button>'});
+ el("nav").innerHTML=html;
+}
+function render(){
+ el("roleTitle").textContent=roleName();
+ el("roleSub").textContent=state.role==="worker"?"Care coordination workspace":state.role==="doctor"?"Clinical review workspace":"Network quality workspace";
+ document.querySelectorAll(".role-btn").forEach(function(b){b.classList.toggle("active",b.dataset.role===state.role)});
+ renderNav();
+ var pages={worker:{dashboard:workerDash,patients:patients,triage:triage,referrals:referrals,followup:followup},
+ doctor:{dashboard:doctorDash,patient:patient,referrals:referrals,followup:followup},
+ admin:{dashboard:adminDash,facilities:facilities,analytics:analytics}};
+ el("content").innerHTML=pages[state.role][state.page]();
+}
+function workerDash(){
+ return shell("Good evening, Arjun.","FRONTLINE WORKER",
+ '<div class="grid stats">'+
+ stat("38","Patients today")+stat("12","Pending referrals")+stat("4","High-risk follow-ups")+stat("24 min","Avg wait time")+
+ '</div><div class="grid cards"><div class="card"><div class="row"><div><div class="eyebrow">ACTIVE CARE JOURNEY</div><div class="patient">Meena Devi • 46 yrs</div></div><span class="pill amber">'+state.referral+'</span></div>'+
+ '<div class="muted small" style="margin-top:5px">Kolar PHC • Hypertension review</div>'+
+ '<div class="journey"><span class="step">Triage ✓</span><span class="arrow">→</span><span class="step">Doctor review '+(state.queued?'✓':'')+'</span><span class="arrow">→</span><span class="step">Referral '+(state.referral==='Completed'?'✓':'')+'</span><span class="arrow">→</span><span class="step">Follow-up</span></div>'+
+ '<div class="actionbar">'+btn("Open case","primary","setPage(\'triage\')")+btn("View referral","secondary","setPage(\'referrals\')")+'</div></div>'+
+ '<div class="card"><div class="eyebrow">NEEDS ATTENTION</div><h3 style="margin:5px 0 14px">3 follow-ups overdue</h3><p class="muted small">Ravi Kumar has missed his chronic-care follow-up. Outreach is recommended.</p>'+btn("Open follow-up","secondary","setPage(\'followup\')")+'</div></div>');
+}
+function stat(n,l){return '<div class="card"><div class="stat-label">'+l+'</div><div class="stat-num">'+n+'</div></div>'}
+function patients(){
+ return shell("Patients","REGISTRY",'<div class="card"><div class="row"><div><h3 style="margin:0">Registered patients</h3><div class="muted small">Fictional demo records</div></div>'+btn("Register patient","primary","openModal()")+'</div><table class="table"><tr><th>Patient</th><th>Age</th><th>Condition</th><th>Status</th><th></th></tr><tr><td><b>Meena Devi</b></td><td>46</td><td>Hypertension</td><td><span class="pill amber">Referral active</span></td><td>'+btn("Open","secondary","setPage(\'triage\')")+'</td></tr><tr><td><b>Ravi Kumar</b></td><td>58</td><td>Diabetes</td><td><span class="pill red">Follow-up overdue</span></td><td>'+btn("Follow-up","secondary","setPage(\'followup\')")+'</td></tr></table></div>');
+}
+function triage(){
+ return shell("Assisted Triage","MEENA DEVI • 46 YEARS",
+ '<div class="grid cards"><div class="card"><h3 style="margin-top:0">Symptoms & observations</h3><div class="form-grid"><div class="field"><label>Primary symptom</label><input value="Headache and dizziness" readonly></div><div class="field"><label>Blood pressure</label><input value="168 / 104 mmHg" readonly></div><div class="field"><label>Duration</label><input value="5 days" readonly></div><div class="field"><label>Red flags</label><input value="None reported" readonly></div></div>'+
+ '<div class="notice"><b>Decision support:</b> assisted triage uses the entered observations to recommend the next care pathway. It does not diagnose the patient.</div>'+
+ (state.triaged?'<div class="notice" style="background:#eaf7ef;border-color:#cfe9d8"><b>SPECIALIST REVIEW RECOMMENDED</b><br>Blood pressure is elevated. Route to doctor review and consider district-level referral.</div>':'')+
+ '<div class="actionbar">'+btn(state.triaged?"Triage completed":"Run assisted triage",state.triaged?"secondary":"primary","runTriage()")+(state.triaged?btn(state.queued?"Sent to doctor queue":"Send to doctor queue","primary","sendQueue()"):"")+'</div></div>'+
+ '<div class="card"><div class="eyebrow">PATIENT HISTORY</div><h3 style="margin-top:4px">Longitudinal record</h3><p class="small">Previous PHC visit: 21 Aug 2026</p><p class="small">Medication: Amlodipine 5 mg</p><p class="small">Last BP: 154 / 96 mmHg</p><span class="pill green">Record available offline</span></div></div>');
+}
+function doctorDash(){
+ return shell("Doctor Queue","CLINICAL REVIEW",
+ '<div class="grid cards"><div class="card"><div class="row"><div><div class="eyebrow">NEW CASE</div><h3 style="margin:4px 0">Meena Devi</h3><div class="muted small">46 yrs • Kolar PHC • Hypertension review</div></div><span class="pill amber">Needs review</span></div><hr style="border:0;border-top:1px solid #edf0f5;margin:18px 0"><p class="small"><b>Triage:</b> BP 168/104 mmHg • headache • dizziness</p><p class="small"><b>Recommendation:</b> specialist review and district referral.</p>'+btn("Review case","primary","setPage(\'patient\')")+'</div>'+
+ '<div class="card"><div class="eyebrow">QUEUE TODAY</div>'+stat("12","Cases awaiting action")+stat("4","High-risk")+'</div></div>');
+}
+function patient(){
+ return shell("Meena Devi","PATIENT RECORD",'<div class="grid cards"><div class="card"><h3 style="margin-top:0">Clinical summary</h3><p><b>Age:</b> 46</p><p><b>Condition:</b> Hypertension</p><p><b>Latest BP:</b> 168 / 104 mmHg</p><p><b>Symptoms:</b> Headache, dizziness</p><div class="notice"><b>Decision support:</b> specialist review recommended based on recorded observations.</div><div class="field"><label>Doctor notes</label><textarea id="notes">Elevated BP. Review medication adherence and assess need for specialist consultation.</textarea></div><div class="actionbar">'+btn("Create referral & care plan","primary","createReferral()")+'</div></div>'+
+ '<div class="card"><div class="eyebrow">CARE JOURNEY</div><div class="journey"><span class="step">PHC ✓</span><span class="arrow">→</span><span class="step">Triage ✓</span><span class="arrow">→</span><span class="step">Doctor review ✓</span><span class="arrow">→</span><span class="step">Referral</span><span class="arrow">→</span><span class="step">Follow-up</span></div><p class="small muted">One connected record across levels of care.</p></div></div>');
+}
+function referrals(){
+ var statuses=["Created","Scheduled","Visited","Completed"]; var idx=statuses.indexOf(state.referral);
+ return shell("Referral Tracker","RL-2048 • MEENA DEVI",
+ '<div class="grid cards"><div class="card"><div class="row"><div><h3 style="margin:0">Kolar PHC → District Hospital</h3><div class="muted small">Specialist review + diagnostic coordination</div></div><span class="pill '+(state.referral==="Completed"?"green":"amber")+'">'+state.referral+'</span></div><div class="journey">'+statuses.map(function(s,i){return '<span class="step">'+(i<=idx?'✓ ':'')+s+'</span>'+(i<3?'<span class="arrow">→</span>':'')}).join('')+'</div><div class="actionbar">'+btn(idx<3?"Advance status":"Referral completed",idx<3?"primary":"secondary","advanceReferral()")+'</div></div>'+
+ '<div class="card"><div class="eyebrow">COORDINATION</div><p class="small"><b>Diagnostic:</b> CBC + BP review</p><p class="small"><b>Facility:</b> District Hospital</p><p class="small"><b>Slot:</b> 10 Sep 2026</p><p class="small"><b>Next follow-up:</b> 14 days after treatment</p><span class="pill green">Auto-follow-up enabled</span></div></div>');
+}
+function followup(){
+ return shell("Follow-up","CONTINUITY OF CARE",'<div class="grid stats">'+stat("4","Due today")+stat("3","Overdue")+stat("31","Completed")+stat("92%","High-risk coverage")+'</div><div class="card"><table class="table"><tr><th>Patient</th><th>Reason</th><th>Due</th><th>Status</th><th></th></tr><tr><td><b>Ravi Kumar</b></td><td>Diabetes review</td><td>2 days ago</td><td><span class="pill red">Overdue</span></td><td>'+btn(state.followupAssigned?"Outreach assigned":"Assign outreach","primary","assignOutreach()")+'</td></tr><tr><td><b>Meena Devi</b></td><td>Post-referral check</td><td>14 days after treatment</td><td><span class="pill amber">Upcoming</span></td><td>'+btn("Schedule","secondary","alert(\'Follow-up slot ready to schedule.\')")+'</td></tr></table></div>');
+}
+function adminDash(){
+ return shell("System Overview","ADMINISTRATOR",
+ '<div class="grid stats">'+stat("1,842","Patients served")+stat("86%","Referral completion")+stat("37","Pending referrals")+stat("92%","High-risk follow-up")+'</div><div class="grid cards"><div class="card"><div class="eyebrow">REFERRAL FUNNEL</div><div class="funnel">'+funnel("Created",120,120)+funnel("Scheduled",103,120)+funnel("Visited",91,120)+funnel("Completed",86,120)+'</div></div><div class="card"><div class="eyebrow">NETWORK ALERTS</div><p class="small">• 7 referrals waiting &gt; 48 hours</p><p class="small">• 2 facilities report diagnostic delays</p><p class="small">• 92% high-risk follow-up coverage</p><span class="pill green">Quality monitoring active</span></div></div>');
+}
+function funnel(a,n,max){return '<div class="funnel-row"><span>'+a+'</span><div class="bar"><i style="width:'+Math.round(n/max*100)+'%"></i></div><b>'+n+'</b></div>'}
+function facilities(){return shell("Facilities","NETWORK VISIBILITY",'<div class="grid cards"><div class="card"><h3>Kolar PHC</h3><p class="small">Staffed • Queue 24 min</p><span class="pill green">Diagnostics available</span></div><div class="card"><h3>District Hospital</h3><p class="small">Referral hub • Specialist services</p><span class="pill amber">7 referrals pending</span></div></div>')}
+function analytics(){return shell("Quality Analytics","ACCOUNTABILITY",'<div class="grid stats">'+stat("86%","Referral completion")+stat("24 min","Average wait")+stat("92%","High-risk follow-up")+stat("37","Open referrals")+'</div><div class="card"><h3>What SEHATLINK measures</h3><p class="small">Referral completion, waiting time, follow-up adherence, facility bottlenecks and high-risk coverage.</p></div>')}
+function runTriage(){state.triaged=true;render()}
+function sendQueue(){state.queued=true;render();alert("Case sent to doctor queue.")}
+function createReferral(){state.referral="Created";render();alert("Referral RL-2048 created and care plan linked.")}
+function advanceReferral(){var s=["Created","Scheduled","Visited","Completed"],i=s.indexOf(state.referral);if(i<3)state.referral=s[i+1];render()}
+function assignOutreach(){state.followupAssigned=true;render();alert("Outreach assigned to PHC staff.")}
+function openModal(){el("modalRoot").innerHTML='<div class="modal" onclick="if(event.target===this)closeModal()"><div class="modal-box"><h2 style="margin-top:0">Register patient</h2><div class="form-grid"><div class="field"><label>Name</label><input placeholder="Patient name"></div><div class="field"><label>Age</label><input placeholder="Age"></div><div class="field"><label>Phone</label><input placeholder="Optional"></div><div class="field"><label>Village</label><input placeholder="Village"></div></div><div class="actionbar">'+btn("Save patient","primary","closeModal();alert(\'Demo patient registered.\')")+btn("Cancel","secondary","closeModal()")+'</div></div></div>'}
+function closeModal(){el("modalRoot").innerHTML=""}
+
+document.querySelectorAll(".role-btn").forEach(function(b){b.addEventListener("click",function(){state.role=b.dataset.role;state.page="dashboard";render()})});
+window.setPage=setPage;window.runTriage=runTriage;window.sendQueue=sendQueue;window.createReferral=createReferral;window.advanceReferral=advanceReferral;window.assignOutreach=assignOutreach;window.openModal=openModal;window.closeModal=closeModal;
+render();
+})();
+</script>
+</body>
+</html>
